@@ -220,3 +220,9 @@ func (bingSearchResult *BingNewsSearchResult) MakeBingRequest(query string, resu
 
 	return nil
 }
+
+// GetSiteURLFromBingURL takes the url for each result bing gives (which has a bunch of junk in it)
+// and gets the legit permanent url from it.
+func GetSiteURLFromBingURL(url string) string {
+	return strings.Split(strings.Split(url, "r=")[1], "&")[0]
+}
