@@ -22,6 +22,21 @@ type BingWebSearchResult struct {
 	Sidebar         *Sidebar         `json:"sidebar,omitempty"`
 }
 
+type BingNewsSearchResult struct {
+	Type                  string        `json:"_type"`
+	ReadLink              string        `json:"readLink"`
+	TotalEstimatedMatches int64         `json:"totalEstimatedMatches"`
+	Sort                  []*SortType   `json:"sort"`
+	Value                 []*NewsResult `json:"value"`
+}
+
+type SortType struct {
+	Name       string `json:"name"`
+	ID         string `json:"id"`
+	IsSelected bool   `json:"isSelected"`
+	URL        string `json:"url"`
+}
+
 type WebPages struct {
 	WebSearchURL          string     `json:"webSearchUrl,omitempty"`
 	TotalEstimatedMatches int64      `json:"totalEstimatedMatches,omitempty"`
@@ -166,10 +181,30 @@ type SidebarItem struct {
 	Value      *Value `json:"value,omitempty"`
 }
 
-func (bingSearchResult *BingWebSearchResult) MakeBingRequest(query string) error {
+func (bingSearchResult *BingWebSearchResult) MakeBingRequest(query string, resultCount string) error {
 	client := &http.Client{}
-	newURL := strings.Replace(query, " ", "+", -1)
-	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/search?q=" + newURL + "&offset=0&count=20&mkt=en-us"
+	newQuery := strings.Replace(query, " ", "+", -1)
+	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/search?q=" + newQuery + "&offset=0&count=" + resultCount + "&mkt=" + config["bingMkt"]
+
+	req, err := http.NewRequest("GET", reqURL, nil)
+	req.Header.Set("Ocp-Apim-Subscription-Key", apiKey)
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("Error: " + err.Error())
+		return err
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	json.Unmarshal(body, &bingSearchResult)
+
+	return nil
+}
+
+func (bingSearchResult *BingNewsSearchResult) MakeBingRequest(query string, resultCount string) error {
+	client := &http.Client{}
+	newQuery := strings.Replace(query, " ", "+", -1)
+	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/news/search?q=" +
+		newQuery + "&offset=0&count=" + resultCount + "&freshness=Month&mkt=" + config["bingMkt"]
 
 	req, err := http.NewRequest("GET", reqURL, nil)
 	req.Header.Set("Ocp-Apim-Subscription-Key", apiKey)
