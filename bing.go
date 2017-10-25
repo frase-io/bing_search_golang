@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	apiKey = ""
+	ApiKey = ""
 )
 
 type BingWebSearchResult struct {
@@ -188,7 +188,7 @@ func (bingSearchResult *BingWebSearchResult) MakeBingRequest(query string, resul
 	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/search?q=" + newQuery + "&offset=" + strconv.Itoa(offset) + "&count=" + resultCount + "&mkt=en-us"
 
 	req, err := http.NewRequest("GET", reqURL, nil)
-	req.Header.Set("Ocp-Apim-Subscription-Key", apiKey)
+	req.Header.Set("Ocp-Apim-Subscription-Key", ApiKey)
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("Error: " + err.Error())
@@ -208,7 +208,7 @@ func (bingSearchResult *BingNewsSearchResult) MakeBingRequest(query string, resu
 		newQuery + "&offset=" + strconv.Itoa(offset) + "&count=" + resultCount + "&freshness=Month&mkt=en-us"
 
 	req, err := http.NewRequest("GET", reqURL, nil)
-	req.Header.Set("Ocp-Apim-Subscription-Key", apiKey)
+	req.Header.Set("Ocp-Apim-Subscription-Key", ApiKey)
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("Error: " + err.Error())
