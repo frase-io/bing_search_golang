@@ -11,6 +11,7 @@ import (
 
 var (
 	ApiKey = ""
+	Mkt    = "en-us"
 )
 
 type BingWebSearchResult struct {
@@ -185,7 +186,7 @@ type SidebarItem struct {
 func (bingSearchResult *BingWebSearchResult) MakeBingRequest(query string, resultCount int, offset int) error {
 	client := &http.Client{}
 	newQuery := strings.Replace(query, " ", "+", -1)
-	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/search?q=" + newQuery + "&offset=" + strconv.Itoa(offset) + "&count=" + strconv.Itoa(resultCount) + "&mkt=en-us"
+	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/search?q=" + newQuery + "&offset=" + strconv.Itoa(offset) + "&count=" + strconv.Itoa(resultCount) + "&mkt=" + Mkt
 
 	req, err := http.NewRequest("GET", reqURL, nil)
 	req.Header.Set("Ocp-Apim-Subscription-Key", ApiKey)
@@ -205,7 +206,7 @@ func (bingSearchResult *BingNewsSearchResult) MakeBingRequest(query string, resu
 	client := &http.Client{}
 	newQuery := strings.Replace(query, " ", "+", -1)
 	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/news/search?q=" +
-		newQuery + "&offset=" + strconv.Itoa(offset) + "&count=" + strconv.Itoa(resultCount) + "&freshness=Month&mkt=en-us"
+		newQuery + "&offset=" + strconv.Itoa(offset) + "&count=" + strconv.Itoa(resultCount) + "&freshness=Month&mkt=" + Mkt
 
 	req, err := http.NewRequest("GET", reqURL, nil)
 	req.Header.Set("Ocp-Apim-Subscription-Key", ApiKey)
