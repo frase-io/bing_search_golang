@@ -184,7 +184,7 @@ type SidebarItem struct {
 func (bingSearchResult *BingWebSearchResult) MakeBingRequest(query string, resultCount string) error {
 	client := &http.Client{}
 	newQuery := strings.Replace(query, " ", "+", -1)
-	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/search?q=" + newQuery + "&offset=0&count=" + resultCount + "&mkt=" + config["bingMkt"]
+	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/search?q=" + newQuery + "&offset=0&count=" + resultCount + "&mkt=en-us"
 
 	req, err := http.NewRequest("GET", reqURL, nil)
 	req.Header.Set("Ocp-Apim-Subscription-Key", apiKey)
@@ -204,7 +204,7 @@ func (bingSearchResult *BingNewsSearchResult) MakeBingRequest(query string, resu
 	client := &http.Client{}
 	newQuery := strings.Replace(query, " ", "+", -1)
 	reqURL := "https://api.cognitive.microsoft.com/bing/v5.0/news/search?q=" +
-		newQuery + "&offset=0&count=" + resultCount + "&freshness=Month&mkt=" + config["bingMkt"]
+		newQuery + "&offset=0&count=" + resultCount + "&freshness=Month&mkt=en-us"
 
 	req, err := http.NewRequest("GET", reqURL, nil)
 	req.Header.Set("Ocp-Apim-Subscription-Key", apiKey)
